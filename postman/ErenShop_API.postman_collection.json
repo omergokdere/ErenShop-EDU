@@ -1,0 +1,719 @@
+{
+  "info": {
+    "_postman_id": "erenshop-api-collection",
+    "name": "ErenShop API",
+    "description": "ErenShop Mini Sipariş ve Stok Yönetim Servisi - Eğitim Koleksiyonu\n\n**Kullanım:** ErenShop_Local environment'ını seç ve istekleri çalıştır.\n\n**Akış:**\n1. Health Check → API çalışıyor mu?\n2. Category ekle\n3. Product ekle\n4. Customer ekle\n5. Sepete ürün ekle\n6. Sipariş oluştur\n7. Ödeme yap\n8. Raporları gör",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "01 - Health Check",
+      "item": [
+        {
+          "name": "API Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "health"]
+            },
+            "description": "API ve veritabanı bağlantısını kontrol eder."
+          }
+        }
+      ]
+    },
+    {
+      "name": "02 - Categories",
+      "item": [
+        {
+          "name": "Tüm Kategorileri Listele",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "categories"]
+            }
+          }
+        },
+        {
+          "name": "Kategori Detayı Getir",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/categories/{{categoryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "categories", "{{categoryId}}"]
+            }
+          }
+        },
+        {
+          "name": "Yeni Kategori Ekle",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Elektronik\",\n  \"description\": \"Elektronik ürünler\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "categories"]
+            }
+          }
+        },
+        {
+          "name": "Kategori Güncelle",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Elektronik & Teknoloji\",\n  \"description\": \"Güncellenmiş açıklama\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/categories/{{categoryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "categories", "{{categoryId}}"]
+            }
+          }
+        },
+        {
+          "name": "Kategori Sil (Pasife Al)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/categories/{{categoryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "categories", "{{categoryId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "03 - Products",
+      "item": [
+        {
+          "name": "Tüm Ürünleri Listele",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/products",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products"]
+            }
+          }
+        },
+        {
+          "name": "Ürün Ara (keyword=mouse)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/products/search?keyword=mouse",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "search"],
+              "query": [
+                {
+                  "key": "keyword",
+                  "value": "mouse"
+                }
+              ]
+            },
+            "description": "Query parameter kullanımı örneği: ?keyword=mouse"
+          }
+        },
+        {
+          "name": "Kategoriye Göre Ürünler",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/products/category/{{categoryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "category", "{{categoryId}}"]
+            }
+          }
+        },
+        {
+          "name": "Ürün Detayı Getir",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/products/{{productId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "{{productId}}"]
+            }
+          }
+        },
+        {
+          "name": "Yeni Ürün Ekle",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"categoryId\": 1,\n  \"name\": \"Kablosuz Mouse\",\n  \"description\": \"Bluetooth destekli kablosuz mouse\",\n  \"price\": 450.00,\n  \"stock\": 25\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/products",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products"]
+            }
+          }
+        },
+        {
+          "name": "Ürün Güncelle",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"price\": 499.00,\n  \"stock\": 30\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/products/{{productId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "{{productId}}"]
+            }
+          }
+        },
+        {
+          "name": "Ürün Sil (Pasife Al)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/products/{{productId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "{{productId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "04 - Customers",
+      "item": [
+        {
+          "name": "Tüm Müşterileri Listele",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/customers",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "customers"]
+            }
+          }
+        },
+        {
+          "name": "Müşteri Detayı Getir",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/customers/{{customerId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "customers", "{{customerId}}"]
+            }
+          }
+        },
+        {
+          "name": "Yeni Müşteri Ekle",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"Eren\",\n  \"last_name\": \"Gokdere\",\n  \"email\": \"eren@example.com\",\n  \"phone\": \"05550000000\",\n  \"address\": \"İstanbul\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/customers",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "customers"]
+            }
+          }
+        },
+        {
+          "name": "Müşteri Güncelle",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"address\": \"İstanbul, Beşiktaş\",\n  \"phone\": \"05559999999\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/customers/{{customerId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "customers", "{{customerId}}"]
+            }
+          }
+        },
+        {
+          "name": "Müşteri Sil (Pasife Al)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/customers/{{customerId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "customers", "{{customerId}}"]
+            }
+          }
+        },
+        {
+          "name": "Müşteri Siparişleri",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/customers/{{customerId}}/orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "customers", "{{customerId}}", "orders"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "05 - Cart",
+      "item": [
+        {
+          "name": "Sepete Ürün Ekle",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": 1,\n  \"productId\": 1,\n  \"quantity\": 2\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/cart/add",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cart", "add"]
+            }
+          }
+        },
+        {
+          "name": "Sepeti Görüntüle",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/cart/{{customerId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cart", "{{customerId}}"]
+            }
+          }
+        },
+        {
+          "name": "Sepetten Ürün Çıkar",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/cart/items/{{cartItemId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cart", "items", "{{cartItemId}}"]
+            }
+          }
+        },
+        {
+          "name": "Sepeti Temizle",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/cart/clear/{{customerId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cart", "clear", "{{customerId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "06 - Orders",
+      "item": [
+        {
+          "name": "Sepetten Sipariş Oluştur",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/orders/create-from-cart",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "orders", "create-from-cart"]
+            },
+            "description": "Müşterinin sepetini siparişe dönüştürür. Stok otomatik düşer."
+          }
+        },
+        {
+          "name": "Tüm Siparişleri Listele",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "orders"]
+            }
+          }
+        },
+        {
+          "name": "Sipariş Detayı Getir",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/orders/{{orderId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "orders", "{{orderId}}"]
+            }
+          }
+        },
+        {
+          "name": "Müşteriye Göre Siparişler",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/orders/customer/{{customerId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "orders", "customer", "{{customerId}}"]
+            }
+          }
+        },
+        {
+          "name": "Sipariş Durumunu Güncelle",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"Processing\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/orders/{{orderId}}/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "orders", "{{orderId}}", "status"]
+            }
+          }
+        },
+        {
+          "name": "Sipariş Numarasına Göre Getir",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/orders/by-number/{{orderNumber}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "orders", "by-number", "{{orderNumber}}"]
+            },
+            "description": "OrderNumber (ör: ORD-20260428-XXXX) ile sipariş detayı getir."
+          }
+        }
+      ]
+    },
+    {
+      "name": "07 - Payments",
+      "item": [
+        {
+          "name": "Mock Ödeme - Başarılı",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orderId\": 1,\n  \"paymentType\": \"CreditCard\",\n  \"amount\": 900.00,\n  \"forceFail\": false\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/payments/mock-pay",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "payments", "mock-pay"]
+            },
+            "description": "forceFail=false → Ödeme başarılı. Sipariş durumu 'Paid' olur."
+          }
+        },
+        {
+          "name": "Mock Ödeme - Başarısız (forceFail)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orderId\": 1,\n  \"paymentType\": \"CreditCard\",\n  \"amount\": 900.00,\n  \"forceFail\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/payments/mock-pay",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "payments", "mock-pay"]
+            },
+            "description": "forceFail=true → Ödeme başarısız simülasyonu. Sipariş 'PaymentFailed' olur."
+          }
+        }
+      ]
+    },
+    {
+      "name": "08 - Reports",
+      "item": [
+        {
+          "name": "Günlük Satış (Bugün)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/reports/daily-sales",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reports", "daily-sales"]
+            }
+          }
+        },
+        {
+          "name": "Günlük Satış (Belirli Tarih)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/reports/daily-sales?date=2026-04-28",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reports", "daily-sales"],
+              "query": [
+                {
+                  "key": "date",
+                  "value": "2026-04-28"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "En Çok Satılan Ürünler",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/reports/top-products?limit=5",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reports", "top-products"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "5"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Müşteri Sipariş Özeti",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/reports/customer-summary/{{customerId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reports", "customer-summary", "{{customerId}}"]
+            }
+          }
+        },
+        {
+          "name": "Kategori Satış Özeti",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/reports/category-sales",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reports", "category-sales"]
+            }
+          }
+        },
+        {
+          "name": "Stok Azalan Ürünler",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/reports/low-stock-products?threshold=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reports", "low-stock-products"],
+              "query": [
+                {
+                  "key": "threshold",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "09 - Error Scenarios",
+      "item": [
+        {
+          "name": "Olmayan Kategori (404)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/categories/9999",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "categories", "9999"]
+            },
+            "description": "Olmayan bir ID ile istek → 404 Not Found beklenir."
+          }
+        },
+        {
+          "name": "Olmayan Ürün (404)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/products/9999",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "9999"]
+            }
+          }
+        },
+        {
+          "name": "Boş Sepetten Sipariş (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": 999\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/orders/create-from-cart",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "orders", "create-from-cart"]
+            },
+            "description": "Olmayan müşteri ID → 400 hatası beklenir."
+          }
+        },
+        {
+          "name": "Geçersiz Sipariş Durumu (400)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"GecersizDurum\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/orders/{{orderId}}/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "orders", "{{orderId}}", "status"]
+            },
+            "description": "Geçersiz status değeri → 400 hatası beklenir."
+          }
+        },
+        {
+          "name": "Aynı Email ile Müşteri Ekle (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"Test\",\n  \"last_name\": \"User\",\n  \"email\": \"eren@example.com\",\n  \"phone\": \"05550000000\",\n  \"address\": \"Test\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/customers",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "customers"]
+            },
+            "description": "Zaten kayıtlı email → 400 hatası beklenir."
+          }
+        }
+      ]
+    }
+  ]
+}

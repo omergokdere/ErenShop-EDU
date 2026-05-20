@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ErenShop</title>
+  <link rel="stylesheet" href="style.css?v=2" />
+</head>
+<body>
+
+  <!-- ========== HEADER ========== -->
+  <header class="header">
+    <div class="header-inner">
+      <button class="menu-toggle" id="menuToggle" title="Menü">☰</button>
+      <div class="logo">🛒 ErenShop</div>
+      <button class="cart-btn" id="cartToggleBtn" style="margin-left:auto;">
+        Sepetim
+        <span class="cart-badge" id="cartBadge">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ========== SOL SIDEBAR ========== -->
+  <aside class="side-nav" id="sideNav">
+    <div class="side-nav-header">
+      <span>Menü</span>
+      <button class="side-nav-close" id="menuClose" title="Kapat">✕</button>
+    </div>
+    <div class="side-nav-body">
+      <div class="nav-section">
+        <label class="nav-label">Kullanıcı</label>
+        <div class="user-tag-side" id="userTag">⏳ Yükleniyor...</div>
+      </div>
+      <div class="nav-section">
+        <label class="nav-label">Sayfalar</label>
+        <a href="/frontend/index.html" class="nav-link active">🛒 Mağaza</a>
+        <a href="/frontend/training.html" class="nav-link">🎓 Eğitim</a>
+        <a href="/frontend/docs.html" class="nav-link">📖 Dokümanlar</a>
+        <a href="/docs" target="_blank" class="nav-link">📋 Swagger API</a>
+      </div>
+    </div>
+  </aside>
+  <div class="side-nav-overlay" id="sideNavOverlay"></div>
+
+  <!-- ========== ANA İÇERİK ========== -->
+  <main class="main">
+
+    <!-- Kategori Filtreleri -->
+    <section class="categories" id="categoriesBar">
+      <button class="cat-btn active" data-id="0">Tümü</button>
+      <!-- Kategoriler JS ile doldurulacak -->
+    </section>
+
+    <!-- Arama Kutusu -->
+    <div class="search-bar">
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Ürün ara..."
+        autocomplete="off"
+      />
+    </div>
+
+    <!-- Ürün Grid -->
+    <section class="products-grid" id="productsGrid">
+      <!-- Ürünler JS ile doldurulacak -->
+    </section>
+
+  </main>
+
+  <!-- ========== SEPET SIDEBAR ========== -->
+  <div class="overlay" id="overlay"></div>
+
+  <aside class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header">
+      <h2>Sepetim</h2>
+      <button class="close-btn" id="closeSidebarBtn">✕</button>
+    </div>
+
+    <div class="cart-items" id="cartItems">
+      <!-- Sepet ürünleri JS ile doldurulacak -->
+    </div>
+
+    <div class="cart-footer">
+      <div class="cart-total">
+        Toplam: <strong id="cartTotal">₺0.00</strong>
+      </div>
+      <button class="order-btn" id="orderBtn">Siparişi Tamamla</button>
+    </div>
+  </aside>
+
+  <!-- ========== TOAST BİLDİRİM ========== -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ========== SİPARİŞ BAŞARILI MODAL ========== -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <div class="modal-icon">✅</div>
+      <h2>Sipariş Verildi!</h2>
+      <p id="modalOrderNo"></p>
+      <button class="modal-btn" id="modalCloseBtn">Tamam</button>
+    </div>
+  </div>
+
+  <script src="app.js?v=2"></script>
+</body>
+</html>

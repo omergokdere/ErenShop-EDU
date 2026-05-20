@@ -1,0 +1,56 @@
+# ============================================================
+# .gitignore — ErenShop EDU
+# ============================================================
+
+# Python sanal ortam
+venv/
+env/
+ENV/
+.venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Dağıtım / paket
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+*.egg-info/
+*.egg
+
+# Ortam değişkenleri (gizli bilgi içerebilir)
+.env
+.env.local
+.env.*.local
+
+# Eren'in yüklediği Word dokümanları (kullanıcı verisi — repo'ya gitmesin)
+uploads/
+!uploads/.gitkeep
+
+# IDE / Editör
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Test / coverage
+.coverage
+.pytest_cache/
+htmlcov/
+.tox/
+
+# Loglar
+*.log
+
+# Geçici dosyalar
+*.tmp
+*.bak

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ErenShop — Eğitim Platformu</title>
+  <link rel="stylesheet" href="style.css?v=2" />
+  <link rel="stylesheet" href="training.css?v=6" />
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <button class="menu-toggle" id="menuToggle" title="Menü">☰</button>
+    <div class="logo">🎓 ErenShop Eğitim</div>
+    <div class="header-user" id="headerUser">⏳ Yükleniyor...</div>
+  </div>
+</header>
+
+<!-- ========== SOL SIDEBAR ========== -->
+<aside class="side-nav" id="sideNav">
+  <div class="side-nav-header">
+    <span>Menü</span>
+    <button class="side-nav-close" id="menuClose" title="Kapat">✕</button>
+  </div>
+  <div class="side-nav-body">
+    <div class="nav-section">
+      <label class="nav-label">Kullanıcı</label>
+      <div class="user-tag-side" id="userTag">⏳ Yükleniyor...</div>
+      <select id="userSelect" class="user-select-side" title="Kullanıcı değiştir"></select>
+    </div>
+
+    <div class="nav-section">
+      <label class="nav-label">Sayfalar</label>
+      <a href="/frontend/index.html" class="nav-link">🛒 Mağaza</a>
+      <a href="/frontend/docs.html" class="nav-link">📖 Dokümanlar</a>
+      <a href="/docs" target="_blank" class="nav-link">📋 Swagger API</a>
+    </div>
+  </div>
+</aside>
+<div class="side-nav-overlay" id="sideNavOverlay"></div>
+
+<nav class="tabs">
+  <button class="tab-btn active" data-tab="hub">📊 Özet</button>
+  <button class="tab-btn" data-tab="analysis">📝 Analiz Egzersizi</button>
+  <button class="tab-btn" data-tab="sql">💾 SQL Testi</button>
+  <button class="tab-btn admin-only" data-tab="admin">👨‍💼 Admin İnceleme</button>
+</nav>
+
+<main class="t-main">
+
+  <!-- ========== TAB: HUB ========== -->
+  <section class="tab-pane active" id="tab-hub">
+    <div class="hub-grid">
+      <div class="hub-card">
+        <h3>📝 Analiz Dokümanları</h3>
+        <div class="hub-stat"><span>Yüklenen:</span> <strong id="statSubmissions">—</strong></div>
+        <div class="hub-stat"><span>Ortalama Puan:</span> <strong id="statAvgScore">—</strong></div>
+        <div class="hub-stat"><span>Onaylanan:</span> <strong id="statApproved">—</strong></div>
+        <div class="hub-stat"><span>Beklemede:</span> <strong id="statPending">—</strong></div>
+      </div>
+      <div class="hub-card">
+        <h3>💾 SQL Testleri</h3>
+        <div class="hub-stat"><span>Tamamlanan Test:</span> <strong id="statTests">—</strong></div>
+        <div class="hub-stat"><span>Ortalama Skor:</span> <strong id="statAvgSqlScore">—</strong></div>
+        <div class="hub-stat"><span>En Yüksek Skor:</span> <strong id="statBestSqlScore">—</strong></div>
+      </div>
+    </div>
+
+    <div class="hub-section">
+      <h2>Son Aktiviteler</h2>
+      <div id="recentActivity" class="recent-list">Yükleniyor...</div>
+    </div>
+  </section>
+
+  <!-- ========== TAB: ANALYSIS ========== -->
+  <section class="tab-pane" id="tab-analysis">
+    <div class="panel">
+      <h2>📝 Analiz Teknik Dokümanı Egzersizi</h2>
+      <p class="muted">
+        Bir geliştirme talebi al → Word şablonunu indir → İş analisti gibi doldur → Sisteme yükle.
+        Sistem dokümanı otomatik puanlar (yapısal + içerik). Ömer son onayı verir.
+      </p>
+
+      <div class="action-row">
+        <button class="btn-primary" id="getRequestBtn">🎲 Yeni Talep Al</button>
+        <a class="btn-secondary" href="/api/training/template/example" target="_blank" title="Tam doldurulmuş bir örnek analiz dokümanı indir (Favori Listesi talebi için)">
+          📚 Örnek Dokümanı İndir
+        </a>
+      </div>
+      <p class="muted" style="margin-top: 10px; font-size: 0.85rem;">
+        💡 <strong>İlk defa mı doldurıyorsun?</strong> Önce "Örnek Dokümanı İndir" ile referans bir analizi gör, sonra kendi talebini al ve aynı stilde doldur.
+      </p>
+
+      <div id="currentRequest" class="request-box hidden"></div>
+
+      <div id="uploadArea" class="upload-area hidden">
+        <h3>📤 Doldurduğun Dokümanı Yükle</h3>
+        <input type="file" id="docFile" accept=".docx" />
+        <button class="btn-primary" id="uploadBtn">Yükle ve Değerlendir</button>
+      </div>
+
+      <div id="evaluationResult" class="eval-result hidden"></div>
+    </div>
+
+    <div class="panel">
+      <h2>📂 Gönderimlerim</h2>
+      <div id="mySubmissions" class="submission-list">Yükleniyor...</div>
+    </div>
+  </section>
+
+  <!-- ========== TAB: SQL TEST ========== -->
+  <section class="tab-pane" id="tab-sql">
+    <div class="panel" id="sqlStartPanel">
+      <h2>💾 Dinamik SQL Bilgi Testi</h2>
+      <p class="muted">
+        Test başlatınca soru havuzundan rastgele sorular seçilir. Her test farklı sorularla gelir.
+        Çoktan seçmeli, boşluk doldurma ve kısa kod yazma sorularıdır.
+      </p>
+
+      <div class="config-row">
+        <label>Kolay <input type="number" id="cfgEasy" value="4" min="0" max="20" /></label>
+        <label>Orta <input type="number" id="cfgMedium" value="4" min="0" max="25" /></label>
+        <label>Zor <input type="number" id="cfgHard" value="2" min="0" max="15" /></label>
+        <button class="btn-primary" id="startTestBtn">🚀 Testi Başlat</button>
+      </div>
+    </div>
+
+    <div class="panel hidden" id="sqlTestPanel">
+      <div class="test-header">
+        <h2 id="testTitle">Test #—</h2>
+        <div class="test-progress" id="testProgress"></div>
+      </div>
+      <div id="testQuestions"></div>
+      <button class="btn-primary" id="completeTestBtn">✅ Testi Tamamla</button>
+    </div>
+
+    <div class="panel hidden" id="sqlResultPanel">
+      <h2>🎉 Test Sonucu</h2>
+      <div id="testResult"></div>
+      <button class="btn-secondary" id="backToStartBtn">← Yeni Test</button>
+    </div>
+
+    <div class="panel">
+      <h2>📂 Geçmiş Testlerim</h2>
+      <div id="myTests" class="submission-list">Yükleniyor...</div>
+    </div>
+  </section>
+
+  <!-- ========== TAB: ADMIN ========== -->
+  <section class="tab-pane" id="tab-admin">
+    <div class="panel">
+      <h2>👨‍💼 Bekleyen İncelemeler</h2>
+      <p class="muted">Eren'in yüklediği analiz dokümanlarını burada onaylayabilir veya reddedebilirsin.</p>
+      <div class="filter-row">
+        <button class="filter-btn active" data-filter="pending">Bekleyen</button>
+        <button class="filter-btn" data-filter="approved">Onaylanan</button>
+        <button class="filter-btn" data-filter="rejected">Reddedilen</button>
+        <button class="filter-btn" data-filter="">Tümü</button>
+      </div>
+      <div id="adminSubmissions" class="submission-list">Yükleniyor...</div>
+    </div>
+  </section>
+
+</main>
+
+<div class="toast" id="toast"></div>
+
+<!-- Modal: detail -->
+<div class="modal-overlay" id="detailOverlay">
+  <div class="modal modal-wide">
+    <div class="modal-header-bar">
+      <span class="modal-header-title">Detay</span>
+      <button class="modal-close" id="closeDetailBtn" title="Kapat">✕</button>
+    </div>
+    <div class="modal-body" id="detailContent"></div>
+  </div>
+</div>
+
+<script src="training.js?v=4"></script>
+</body>
+</html>

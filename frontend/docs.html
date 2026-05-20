@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ErenShop — Dokümanlar</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; color: #333; min-height: 100vh; }
+
+    header { background: linear-gradient(135deg, #667eea, #764ba2); padding: 14px 28px; display: flex; align-items: center; gap: 12px; box-shadow: 0 2px 8px rgba(0,0,0,.2); }
+    header a { color: #fff; text-decoration: none; }
+    .logo { font-size: 1.2rem; font-weight: 700; }
+
+    /* Header hamburger butonu */
+    .menu-toggle {
+      background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.35);
+      color: #fff; width: 38px; height: 38px; border-radius: 50%;
+      font-size: 1.2rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s;
+    }
+    .menu-toggle:hover { background: rgba(255,255,255,0.3); }
+
+    /* Açılır sol gezinme (üst sayfa navigasyonu) */
+    .top-side-nav {
+      position: fixed; top: 0; left: -300px; width: 280px; height: 100vh;
+      background: #fff; box-shadow: 4px 0 16px rgba(0,0,0,0.15);
+      z-index: 2500; transition: left 0.25s ease;
+      display: flex; flex-direction: column;
+    }
+    .top-side-nav.open { left: 0; }
+    .top-side-nav-header {
+      background: #764ba2; color: #fff; padding: 16px 20px;
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: 1.05rem; font-weight: 700;
+    }
+    .top-side-nav-close {
+      background: transparent; border: none; color: #fff;
+      width: 32px; height: 32px; font-size: 1.3rem;
+      cursor: pointer; border-radius: 50%; transition: background 0.15s;
+    }
+    .top-side-nav-close:hover { background: rgba(255,255,255,0.2); }
+    .top-side-nav-body { flex: 1; overflow-y: auto; padding: 16px; }
+    .top-nav-label {
+      display: block; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1px;
+      color: #888; margin-bottom: 8px; padding-left: 4px;
+    }
+    .top-nav-link {
+      display: block; padding: 11px 14px; border-radius: 8px;
+      text-decoration: none; color: #2d2d2d; font-size: 0.95rem; margin-bottom: 4px;
+      transition: background 0.15s, color 0.15s;
+    }
+    .top-nav-link:hover { background: #f5f0ff; color: #764ba2; }
+    .top-side-nav-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 2400;
+      opacity: 0; pointer-events: none; transition: opacity 0.25s;
+    }
+    .top-side-nav-overlay.open { opacity: 1; pointer-events: auto; }
+
+    .layout { display: flex; max-width: 1200px; margin: 24px auto; padding: 0 16px; gap: 20px; align-items: flex-start; }
+
+    .sidebar { width: 210px; flex-shrink: 0; position: sticky; top: 20px; }
+    .sidebar h3 { font-size: .7rem; text-transform: uppercase; letter-spacing: 1px; color: #888; margin-bottom: 8px; padding: 0 4px; }
+    .nav-list { list-style: none; background: #fff; border-radius: 10px; box-shadow: 0 1px 4px rgba(0,0,0,.08); overflow: hidden; margin-bottom: 16px; }
+    .nav-list li a { display: block; padding: 10px 14px; font-size: .88rem; color: #555; text-decoration: none; border-bottom: 1px solid #f0f0f0; transition: background .15s; }
+    .nav-list li:last-child a { border-bottom: none; }
+    .nav-list li a:hover { background: #f5f0ff; color: #764ba2; }
+    .nav-list li a.active { background: #764ba2; color: #fff; font-weight: 600; }
+
+    .content { flex: 1; min-width: 0; }
+    .doc-section { display: none; background: #fff; border-radius: 10px; box-shadow: 0 1px 4px rgba(0,0,0,.08); padding: 32px 40px; }
+    .doc-section.active { display: block; }
+
+    h1 { font-size: 1.8rem; color: #764ba2; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid #e8e0f5; }
+    h2 { font-size: 1.25rem; color: #444; margin: 28px 0 10px; }
+    h3 { font-size: 1rem; color: #555; margin: 18px 0 8px; }
+    p { line-height: 1.7; margin-bottom: 12px; color: #444; }
+    ul, ol { padding-left: 22px; margin-bottom: 12px; }
+    li { line-height: 1.8; color: #444; }
+    code { background: #f3f0fa; color: #764ba2; padding: 2px 6px; border-radius: 4px; font-size: .87em; font-family: Consolas, monospace; }
+    pre { background: #1e1e2e; color: #cdd6f4; padding: 16px 20px; border-radius: 8px; overflow-x: auto; margin: 12px 0; font-size: .88em; line-height: 1.6; }
+    pre code { background: none; color: inherit; padding: 0; }
+    table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: .9rem; }
+    th { background: #764ba2; color: #fff; padding: 9px 14px; text-align: left; }
+    td { padding: 8px 14px; border-bottom: 1px solid #eee; }
+    tr:hover td { background: #faf8ff; }
+    blockquote { border-left: 4px solid #764ba2; background: #faf8ff; padding: 10px 16px; margin: 14px 0; border-radius: 0 6px 6px 0; color: #555; }
+    hr { border: none; border-top: 2px solid #eee; margin: 22px 0; }
+    .note { background: #fef9c3; border-left: 4px solid #f59e0b; padding: 10px 16px; margin: 14px 0; border-radius: 0 6px 6px 0; color: #555; }
+    .badge { display: inline-block; padding: 2px 9px; border-radius: 4px; font-size: .78rem; font-weight: 700; margin-right: 4px; color: #fff; vertical-align: middle; }
+    .get { background: #22c55e; } .post { background: #f59e0b; } .put { background: #3b82f6; } .delete { background: #ef4444; }
+    .endpoint { margin-bottom: 20px; padding: 14px 16px; border: 1px solid #e8e0f5; border-radius: 8px; }
+    .endpoint:hover { border-color: #764ba2; }
+    .checklist { list-style: none; padding-left: 0; }
+    .checklist li::before { content: "☐ "; color: #764ba2; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+<header>
+  <button class="menu-toggle" id="menuToggle" title="Menü">☰</button>
+  <a class="logo" href="index.html">📖 ErenShop Dokümanlar</a>
+</header>
+
+<!-- ========== ÜST GEZINME SİDEBAR ========== -->
+<aside class="top-side-nav" id="topSideNav">
+  <div class="top-side-nav-header">
+    <span>Menü</span>
+    <button class="top-side-nav-close" id="menuClose" title="Kapat">✕</button>
+  </div>
+  <div class="top-side-nav-body">
+    <label class="top-nav-label">Sayfalar</label>
+    <a href="/frontend/index.html" class="top-nav-link">🛒 Mağaza</a>
+    <a href="/frontend/training.html" class="top-nav-link">🎓 Eğitim</a>
+    <a href="/frontend/docs.html" class="top-nav-link" style="background:#764ba2;color:#fff;">📖 Dokümanlar</a>
+    <a href="/docs" target="_blank" class="top-nav-link">📋 Swagger API</a>
+  </div>
+</aside>
+<div class="top-side-nav-overlay" id="topSideNavOverlay"></div>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <h3>Dokümanlar</h3>
+    <ul class="nav-list">
+      <li><a href="#" data-target="readme" class="active">📖 Genel Bakış</a></li>
+      <li><a href="#" data-target="kurulum">⚙️ Kurulum</a></li>
+      <li><a href="#" data-target="api">🔌 API Dokümanı</a></li>
+      <li><a href="#" data-target="egitim">📅 Eğitim Akışı</a></li>
+      <li><a href="#" data-target="platform">🎓 Eğitim Platformu</a></li>
+      <li><a href="#" data-target="sql">🗄️ SQL Notları</a></li>
+      <li><a href="#" data-target="postman">📬 Postman Notları</a></li>
+    </ul>
+    <h3>Diğer</h3>
+    <ul class="nav-list">
+      <li><a href="http://localhost:8000/docs" target="_blank">📋 Swagger UI</a></li>
+      <li><a href="http://localhost:8000/redoc" target="_blank">📄 ReDoc</a></li>
+    </ul>
+  </nav>
+
+  <!-- CONTENT -->
+  <main class="content">
+
+    <!-- ===================== README ===================== -->
+    <section id="readme" class="doc-section active">
+      <h1>ErenShop API</h1>
+      <p><strong>Mini Sipariş ve Stok Yönetim Servisi — Eğitim Projesi</strong></p>
+      <p>Python FastAPI + Microsoft SQL Server ile geliştirilmiş, eğitim amaçlı bir backend API projesidir.</p>
+
+      <h2>Proje Amacı</h2>
+      <p>Bu proje, başlangıç/orta seviye geliştiricilerin şunları öğrenmesi için hazırlanmıştır:</p>
+      <ul>
+        <li>MSSQL'de veritabanı ve tablo oluşturma</li>
+        <li>Primary Key ve Foreign Key ilişkileri</li>
+        <li>SQL: SELECT, INSERT, UPDATE, DELETE, JOIN, GROUP BY</li>
+        <li>FastAPI ile REST API geliştirme</li>
+        <li>GET, POST, PUT, DELETE metodları</li>
+        <li>Postman ile API testi</li>
+        <li>Transaction mantığı</li>
+        <li>Hata yönetimi ve HTTP status kodları</li>
+        <li>Swagger arayüzü ile API inceleme</li>
+      </ul>
+
+      <h2>Teknolojiler</h2>
+      <table>
+        <tr><th>Katman</th><th>Teknoloji</th></tr>
+        <tr><td>Backend</td><td>Python 3.10+ / FastAPI</td></tr>
+        <tr><td>Veritabanı</td><td>Microsoft SQL Server</td></tr>
+        <tr><td>DB Bağlantısı</td><td>pyodbc</td></tr>
+        <tr><td>API Testi</td><td>Postman</td></tr>
+        <tr><td>Dokümantasyon</td><td>Swagger (otomatik) + HTML</td></tr>
+      </table>
+
+      <h2>Hızlı Başlangıç</h2>
+      <pre><code># 1. Sanal ortam oluştur
+python -m venv venv
+venv\Scripts\activate
+
+# 2. Bağımlılıkları yükle
+pip install -r requirements.txt
+
+# 3. .env dosyasını ayarla
+copy .env.example .env
+
+# 4. SQL scriptlerini sırayla çalıştır
+#    sql/01_create_database.sql
+#    sql/02_create_tables.sql
+#    sql/03_seed_data.sql
+#    sql/08_training_tables.sql       (Eğitim platformu)
+#    sql/09_seed_business_requests.sql (40 geliştirme talebi)
+#    sql/10_seed_sql_questions.sql    (60 SQL sorusu)
+
+# 5. API'yi başlat
+uvicorn app.main:app --reload --port 8000</code></pre>
+
+      <h2>Swagger</h2>
+      <p>API çalışınca → <a href="http://localhost:8000/docs" target="_blank">http://localhost:8000/docs</a></p>
+
+      <h2>Modüller</h2>
+      <table>
+        <tr><th>Modül</th><th>Endpoint Sayısı</th></tr>
+        <tr><td>Health</td><td>1</td></tr>
+        <tr><td>Categories</td><td>5</td></tr>
+        <tr><td>Products</td><td>7</td></tr>
+        <tr><td>Customers</td><td>6</td></tr>
+        <tr><td>Cart</td><td>4</td></tr>
+        <tr><td>Orders</td><td>5</td></tr>
+        <tr><td>Payments</td><td>1</td></tr>
+        <tr><td>Reports</td><td>5</td></tr>
+        <tr><td>Training (Eğitim Platformu)</td><td>16</td></tr>
+      </table>
+
+      <h2>🎓 Eğitim Platformu</h2>
+      <p>İş analisti yetkinliklerini ölçen iki ek modül entegre edilmiştir:</p>
+      <ul>
+        <li><strong>Analiz Teknik Dokümanı Egzersizi</strong> — rastgele bir geliştirme talebi alırsın, Word şablonunu doldurursun, sistem kural tabanlı otomatik puanlar.</li>
+        <li><strong>Dinamik SQL Bilgi Testi</strong> — havuzdan rastgele sorularla her seferinde farklı bir test.</li>
+      </ul>
+      <p>Detaylar için sol menüden <strong>🎓 Eğitim Platformu</strong> sayfasına bak.</p>
+      <p>Direkt erişim: <a href="/frontend/training.html" target="_blank"><strong>/frontend/training.html</strong></a></p>
+
+      <h2>Klasör Yapısı</h2>
+      <pre><code>erenshop-api/
+├── app/
+│   ├── main.py       → FastAPI başlangıç noktası
+│   ├── database.py   → MSSQL bağlantısı
+│   ├── config.py     → Ayarlar
+│   ├── routes/       → Endpoint tanımları
+│   ├── schemas/      → Veri modelleri (Pydantic)
+│   ├── services/     → İş mantığı + SQL sorguları
+│   └── utils/        → Yardımcı fonksiyonlar
+├── sql/              → MSSQL scriptleri
+├── postman/          → Postman collection + environment
+├── frontend/         → HTML/CSS/JS frontend
+├── docs/             → Markdown dokümantasyon
+├── requirements.txt
+├── .env.example
+└── run.bat</code></pre>
+    </section>
+
+    <!-- ===================== KURULUM ===================== -->
+    <section id="kurulum" class="doc-section">
+      <h1>⚙️ Kurulum Kılavuzu</h1>
+      <p>Windows ortamında, VSCode + MSSQL Server + Postman ile adım adım kurulum.</p>
+
+      <h2>1. Gerekli Programlar</h2>
+      <table>
+        <tr><th>Program</th><th>Sürüm</th><th>İndirme</th></tr>
+        <tr><td>Python</td><td>3.10+</td><td>https://python.org</td></tr>
+        <tr><td>VSCode</td><td>Güncel</td><td>https://code.visualstudio.com</td></tr>
+        <tr><td>MSSQL Server</td><td>2019/2022</td><td>https://microsoft.com/sql-server</td></tr>
+        <tr><td>SSMS</td><td>19+</td><td>https://aka.ms/ssmsfullsetup</td></tr>
+        <tr><td>Postman</td><td>Güncel</td><td>https://postman.com</td></tr>
+        <tr><td>ODBC Driver 17</td><td>17+</td><td>https://aka.ms/downloadmsodbcsql</td></tr>
+      </table>
+      <blockquote><strong>Not:</strong> ODBC Driver kurulu değilse pyodbc bağlantısı çalışmaz.</blockquote>
+
+      <h2>2. Python Kurulumu</h2>
+      <ol>
+        <li>https://python.org adresinden Python 3.10+ indir</li>
+        <li>Kurulum sırasında <strong>"Add Python to PATH"</strong> seçeneğini işaretle</li>
+        <li>PowerShell'de test et:</li>
+      </ol>
+      <pre><code>python --version
+pip --version</code></pre>
+
+      <h2>3. VSCode ile Projeyi Açma</h2>
+      <ol>
+        <li>VSCode'u aç → <code>File → Open Folder</code></li>
+        <li><code>erenshop-api</code> klasörünü seç</li>
+        <li>Python extension kurulu değilse Extensions'dan Microsoft Python extension'ını kur</li>
+      </ol>
+
+      <h2>4. Sanal Ortam Oluşturma</h2>
+      <p>VSCode'da terminal aç: <code>Ctrl + ~</code></p>
+      <pre><code># Sanal ortam oluştur
+python -m venv venv
+
+# Aktif et (Windows)
+venv\Scripts\activate</code></pre>
+      <p>Terminal başında <code>(venv)</code> görünüyorsa aktif demektir.</p>
+      <blockquote><strong>Neden sanal ortam?</strong> Projeye özel kütüphaneleri izole eder, diğer projelerle çakışma olmaz.</blockquote>
+
+      <h2>5. Bağımlılıkları Yükleme</h2>
+      <pre><code>pip install -r requirements.txt</code></pre>
+      <p>Yüklenen başlıca paketler:</p>
+      <ul>
+        <li><code>fastapi</code> — API framework</li>
+        <li><code>uvicorn</code> — ASGI sunucu</li>
+        <li><code>pyodbc</code> — MSSQL bağlantısı</li>
+        <li><code>python-dotenv</code> — .env okuyucu</li>
+        <li><code>pydantic</code> — veri doğrulama</li>
+        <li><code>python-docx</code> — Word şablonu üretme/okuma (Eğitim Platformu için)</li>
+        <li><code>python-multipart</code> — dosya yükleme (Eğitim Platformu için)</li>
+      </ul>
+      <blockquote><strong>Önemli:</strong> Bağımlılıkları yükledikten sonra eğitim platformunun çalışması için <code>python-docx</code> ve <code>python-multipart</code>'ın kurulu olduğundan emin ol. Bunlar şablon Word dosyası üretmek ve Eren'in yüklediği dokümanı almak için gereklidir.</blockquote>
+
+      <h2>6. Veritabanı Oluşturma (SSMS)</h2>
+      <ol>
+        <li>SSMS'i aç, sunucuya bağlan (genellikle <code>localhost</code>)</li>
+        <li>New Query → <code>sql/01_create_database.sql</code> içeriğini yapıştır → F5</li>
+        <li>"ErenShopDB başarıyla oluşturuldu." mesajını gör</li>
+      </ol>
+
+      <h2>7. SQL Scriptlerini Sırayla Çalıştır</h2>
+      <div class="note">⚠️ <strong>Sıra önemli!</strong> Her script bir öncekinin üzerine inşa edilir.</div>
+
+      <h3>Ana Mağaza Scriptleri</h3>
+      <table>
+        <tr><th>Sıra</th><th>Dosya</th><th>Açıklama</th></tr>
+        <tr><td>1</td><td><code>01_create_database.sql</code></td><td>Veritabanı oluştur</td></tr>
+        <tr><td>2</td><td><code>02_create_tables.sql</code></td><td>Mağaza tablolarını oluştur (8 tablo)</td></tr>
+        <tr><td>3</td><td><code>03_seed_data.sql</code></td><td>Örnek mağaza verisi ekle</td></tr>
+      </table>
+
+      <h3>Eğitim Platformu Scriptleri</h3>
+      <div class="note">📌 Eğitim platformu (analiz dokümanı egzersizi + SQL bilgi testi) modülünü kullanmak için aşağıdaki 3 script'i de çalıştır.</div>
+      <table>
+        <tr><th>Sıra</th><th>Dosya</th><th>Açıklama</th></tr>
+        <tr><td>4</td><td><code>08_training_tables.sql</code></td><td>6 eğitim tablosu + Eren/Omer kullanıcıları</td></tr>
+        <tr><td>5</td><td><code>09_seed_business_requests.sql</code></td><td>40 geliştirme talebi (kolay/orta/zor)</td></tr>
+        <tr><td>6</td><td><code>10_seed_sql_questions.sql</code></td><td>60 SQL test sorusu</td></tr>
+      </table>
+      <p><strong>SSMS'te nasıl çalıştırılır:</strong></p>
+      <ol>
+        <li>SSMS'i aç, sunucuya bağlan, sol panelden <code>ErenShopDB</code>'yi seç</li>
+        <li><code>File → Open → File</code> ile yukarıdaki dosyayı aç</li>
+        <li>Üst kısımdaki Database dropdown'ında <code>ErenShopDB</code> seçili olsun</li>
+        <li><code>F5</code> (veya Execute) ile çalıştır</li>
+        <li>Alt panelde "Tum training tablolari hazir." gibi mesajları gör ✓</li>
+      </ol>
+
+      <h2>8. .env Dosyasını Hazırla</h2>
+      <pre><code>copy .env.example .env</code></pre>
+      <p><code>.env</code> dosyasını VSCode'da aç ve düzenle:</p>
+      <pre><code># Windows Authentication (önerilen):
+DB_SERVER=localhost
+DB_NAME=ErenShopDB
+DB_USER=
+DB_PASSWORD=
+DB_DRIVER=ODBC Driver 17 for SQL Server
+
+# SQL Authentication kullanıyorsan:
+# DB_SERVER=localhost
+# DB_USER=sa
+# DB_PASSWORD=SifreniYaz</code></pre>
+      <blockquote><strong>SQL Express kullanıyorsan:</strong> <code>DB_SERVER=localhost\SQLEXPRESS</code> yaz.</blockquote>
+
+      <h2>9. API'yi Çalıştır</h2>
+      <div class="note">⚠️ <strong>ÖNEMLİ:</strong> Tüm komutları <code>erenshop-api</code> klasörü içinde çalıştır!<br>
+      Terminal satırı şöyle görünmeli: <code>PS C:\...\erenshop-api&gt;</code></div>
+      <pre><code># Sanal ortamı aktif et
+venv\Scripts\activate
+
+# Sunucuyu başlat
+uvicorn app.main:app --reload --port 8000</code></pre>
+      <p>Terminalda şunu görmen gerekiyor:</p>
+      <pre><code>INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)</code></pre>
+
+      <h2>10. Swagger Kontrolü</h2>
+      <p>Tarayıcıda aç: <a href="http://localhost:8000/docs" target="_blank"><strong>http://localhost:8000/docs</strong></a></p>
+      <p>Tüm endpoint'leri göreceksin. "Try it out" butonu ile direkt test edebilirsin.</p>
+
+      <h2>11. Postman Collection Import</h2>
+      <ol>
+        <li>Postman'ı aç → Collections → <strong>Import</strong></li>
+        <li><code>postman/ErenShop_API.postman_collection.json</code> seç</li>
+        <li>Environments → Import → <code>postman/ErenShop_Local.postman_environment.json</code></li>
+        <li>Sağ üst köşeden <strong>ErenShop_Local</strong> environment'ını seç</li>
+      </ol>
+
+      <hr>
+      <h2>Sık Karşılaşılan Hatalar</h2>
+
+      <h3>❌ pyodbc.InterfaceError: ('IM002', ...)</h3>
+      <p><strong>Sebep:</strong> ODBC Driver kurulu değil.<br>
+      <strong>Çözüm:</strong> "ODBC Driver 17 for SQL Server" indir ve kur: https://aka.ms/downloadmsodbcsql</p>
+
+      <h3>❌ Login failed for user</h3>
+      <p><strong>Sebep:</strong> Kullanıcı adı/şifre yanlış.<br>
+      <strong>Çözüm:</strong> <code>.env</code> dosyasındaki <code>DB_USER</code> ve <code>DB_PASSWORD</code> değerlerini kontrol et.</p>
+
+      <h3>❌ Cannot open database "ErenShopDB"</h3>
+      <p><strong>Sebep:</strong> Veritabanı oluşturulmamış.<br>
+      <strong>Çözüm:</strong> SSMS'te <code>01_create_database.sql</code> scriptini çalıştır.</p>
+
+      <h3>❌ ModuleNotFoundError: No module named 'fastapi'</h3>
+      <p><strong>Sebep:</strong> Sanal ortam aktif değil veya paketler yüklenmemiş.</p>
+      <pre><code>venv\Scripts\activate
+pip install -r requirements.txt</code></pre>
+
+      <h3>❌ 422 Unprocessable Entity</h3>
+      <p><strong>Sebep:</strong> Request body formatı yanlış.<br>
+      <strong>Çözüm:</strong> Postman'da Body → raw → JSON seç. Swagger'da örnek format var.</p>
+
+      <h3>❌ Invalid object name 'TrainingUsers' (veya BusinessRequests, SqlQuestions)</h3>
+      <p><strong>Sebep:</strong> Eğitim platformu tabloları henüz oluşturulmamış.<br>
+      <strong>Çözüm:</strong> SSMS'te sırayla şu 3 dosyayı çalıştır:</p>
+      <ol>
+        <li><code>sql/08_training_tables.sql</code></li>
+        <li><code>sql/09_seed_business_requests.sql</code></li>
+        <li><code>sql/10_seed_sql_questions.sql</code></li>
+      </ol>
+
+      <h3>❌ ModuleNotFoundError: No module named 'docx'</h3>
+      <p><strong>Sebep:</strong> Eğitim platformu için gereken <code>python-docx</code> kütüphanesi yüklü değil.<br>
+      <strong>Çözüm:</strong></p>
+      <pre><code>venv\Scripts\activate
+pip install python-docx python-multipart</code></pre>
+      <p>Veya tüm bağımlılıkları yeniden yükle: <code>pip install -r requirements.txt</code></p>
+
+      <h3>❌ Word şablonu indirilemiyor / "Sadece .docx dosyalari kabul edilir"</h3>
+      <p><strong>Sebep:</strong> Yüklediğin dosya .docx değil (.doc, .docm, .pdf vb.).<br>
+      <strong>Çözüm:</strong> Word'de "Farklı Kaydet" → <strong>Word Belgesi (*.docx)</strong> formatını seç.</p>
+    </section>
+
+    <!-- ===================== API DOKÜMANI ===================== -->
+    <section id="api" class="doc-section">
+      <h1>🔌 API Dokümanı</h1>
+      <p>Tüm endpoint'lerin açıklaması, parametreleri ve örnek cevapları.</p>
+
+      <h2>Standart Response Formatı</h2>
+      <pre><code>// Başarılı:
+{ "success": true,  "message": "İşlem başarılı.", "data": {} }
+
+// Hatalı:
+{ "success": false, "message": "Hata açıklaması.", "data": null }</code></pre>
+
+      <h2>HTTP Status Kodları</h2>
+      <table>
+        <tr><th>Kod</th><th>Anlam</th><th>Ne zaman?</th></tr>
+        <tr><td>200</td><td>OK</td><td>Başarılı GET, PUT, DELETE</td></tr>
+        <tr><td>201</td><td>Created</td><td>Başarılı POST (yeni kayıt)</td></tr>
+        <tr><td>400</td><td>Bad Request</td><td>Geçersiz istek, iş kuralı hatası</td></tr>
+        <tr><td>404</td><td>Not Found</td><td>Kayıt bulunamadı</td></tr>
+        <tr><td>422</td><td>Unprocessable Entity</td><td>Body format hatası</td></tr>
+        <tr><td>500</td><td>Internal Server Error</td><td>Beklenmedik sunucu hatası</td></tr>
+      </table>
+
+      <h2>1. Health Check</h2>
+      <div class="endpoint">
+        <span class="badge get">GET</span> <code>/api/health</code>
+        <p style="margin-top:8px">API ve veritabanı durumunu kontrol eder.</p>
+        <pre><code>{ "success": true, "message": "API ve veritabanı bağlantısı sağlıklı.",
+  "data": { "api": "ok", "database": "ok" } }</code></pre>
+      </div>
+
+      <h2>2. Categories</h2>
+      <div class="endpoint"><span class="badge get">GET</span> <code>/api/categories</code> — Tüm aktif kategorileri listeler.</div>
+      <div class="endpoint"><span class="badge get">GET</span> <code>/api/categories/{category_id}</code> — Tek kategori getirir.</div>
+      <div class="endpoint">
+        <span class="badge post">POST</span> <code>/api/categories</code>
+        <pre><code>{ "name": "Elektronik", "description": "Elektronik ürünler" }</code></pre>
+      </div>
+      <div class="endpoint">
+        <span class="badge put">PUT</span> <code>/api/categories/{category_id}</code> — Tüm alanlar opsiyonel.
+        <pre><code>{ "name": "Yeni Ad", "description": "Yeni açıklama", "is_active": true }</code></pre>
+      </div>
+      <div class="endpoint"><span class="badge delete">DELETE</span> <code>/api/categories/{category_id}</code> — Soft delete (IsActive=0).</div>
+
+      <h2>3. Products</h2>
+      <div class="endpoint"><span class="badge get">GET</span> <code>/api/products</code> — Tüm aktif ürünleri listeler.</div>
+      <div class="endpoint"><span class="badge get">GET</span> <code>/api/products/search?keyword=mouse</code> — Ürün adı/açıklamasında arama.</div>
+      <div class="endpoint"><span class="badge get">GET</span> <code>/api/products/category/{category_id}</code> — Kategoriye göre listeler.</div>
+      <div class="endpoint"><span class="badge get">GET</span> <code>/api/products/{product_id}</code> — Tek ürün getirir.</div>
+      <div class="endpoint">
+        <span class="badge post">POST</span> <code>/api/products</code>
+        <pre><code>{ "categoryId": 1, "name": "Kablosuz Mouse",
+  "description": "Bluetooth destekli", "price": 450.00, "stock": 25 }</code></pre>
+      </div>
+      <div class="endpoint"><span class="badge put">PUT</span> <code>/api/products/{product_id}</code> — Günceller. Tüm alanlar opsiyonel.</div>
+      <div class="endpoint"><span class="badge delete">DELETE</span> <code>/api/products/{product_id}</code> — Soft delete.</div>
+
+      <h2>4. Customers</h2>
+      <div class="endpoint"><span class="badge get">GET</span> <code>/api/customers</code> — Tüm aktif müşterileri listeler.</div>
+      <div class="endpoint"><span class="badge get">GET</span> <code>/api/customers/{customer_id}</code> — Tek müşteri.</div>
+      <div class="endpoint">
+        <span class="badge post">POST</span> <code>/api/customers</code> — Email benzersiz olmalı.
+        <pre><code>{ "first_name": "Eren", "last_name": "Gokdere",
+  "email": "eren@example.com", "phone": "05550000000", "address": "İstanbul" }</code></pre>
+      </div>
+      <div class="endpoint"><span class="badge put">PUT</span> <code>/api/customers/{customer_id}</code></div>
+      <div class="endpoint"><span class="badge delete">DELETE</span> <code>/api/customers/{customer_id}</code></div>
+      <div class="endpoint"><span class="badge get">GET</span> <code>/api/customers/{customer_id}/orders</code> — Müşterinin siparişleri.</div>
+
+      <h2>5. Cart (Sepet)</h2>
+      <div class="endpoint">
+        <span class="badge post">POST</span> <code>/api/cart/add</code> — Sepete ürün ekler. Sepet yoksa otomatik oluşturur.
+        <pre><code>{ "customerId": 1, "productId": 1, "quantity": 2 }</code></pre>
+        <p style="margin-top:8px;font-size:.85rem;color:#666">İş kuralları: müşteri aktif, ürün aktif, stok yeterli olmalı. Ürün zaten varsa miktar güncellenir.</p>
+      </div>
+      <div class="endpoint">
+        <span class="badge get">GET</span> <code>/api/cart/{customer_id}</code> — Sepeti ve toplam tutarı getirir.
+        <pre><code>{ "data": { "cart_id": 1, "items": [
+    { "CartItemId": 1, "ProductName": "Kablosuz Mouse",
+      "Quantity": 2, "UnitPrice": 450.00, "LineTotal": 900.00 }
+  ], "total": 900.00 } }</code></pre>
+      </div>
+      <div class="endpoint"><span class="badge delete">DELETE</span> <code>/api/cart/items/{cart_item_id}</code> — Sepetten tek ürün sil.</div>
+      <div class="endpoint"><span class="badge delete">DELETE</span> <code>/api/cart/clear/{customer_id}</code> — Sepeti tamamen temizle.</div>
+
+      <h2>6. Orders (Siparişler)</h2>
+      <div class="endpoint">
+        <span class="badge post">POST</span> <code>/api/orders/create-from-cart</code> — Sepeti siparişe dönüştürür.
+        <pre><code>{ "customerId": 1 }</code></pre>
+        <p style="margin-top:8px;font-size:.85rem;color:#666">Transaction: stok düşer, sepet temizlenir, sipariş "Pending" olur. Herhangi bir hata → tüm işlem geri alınır.</p>
+      </div>
+      <div class="endpoint"><span class="badge get">GET</span> <code>/api/orders</code> — Tüm siparişler.</div>
+      <div class="endpoint"><span class="badge get">GET</span> <code>/api/orders/{order_id}</code> — Sipariş detayı + ürün listesi.</div>
+      <div class="endpoint"><span class="badge get">GET</span> <code>/api/orders/customer/{customer_id}</code> — Müşterinin siparişleri.</div>
+      <div class="endpoint">
+        <span class="badge put">PUT</span> <code>/api/orders/{order_id}/status</code>
+        <pre><code>{ "status": "Processing" }</code></pre>
+        <p style="margin-top:8px;font-size:.85rem;color:#666">Geçerli durumlar: Pending → Processing → Shipped → Delivered | Paid | PaymentFailed | Cancelled</p>
+      </div>
+
+      <h2>7. Payments (Ödeme)</h2>
+      <div class="endpoint">
+        <span class="badge post">POST</span> <code>/api/payments/mock-pay</code> — Mock ödeme simülasyonu.
+        <pre><code>{ "orderId": 1, "paymentType": "CreditCard",
+  "amount": 900.00, "forceFail": false }</code></pre>
+        <p style="margin-top:8px;font-size:.85rem;color:#666"><code>forceFail: false</code> → başarılı (Paid) | <code>forceFail: true</code> → başarısız (PaymentFailed)</p>
+      </div>
+
+      <h2>8. Reports (Raporlar)</h2>
+      <div class="endpoint"><span class="badge get">GET</span> <code>/api/reports/daily-sales?date=2026-04-28</code> — Günlük satış raporu. <code>date</code> opsiyonel (varsayılan: bugün).</div>
+      <div class="endpoint"><span class="badge get">GET</span> <code>/api/reports/top-products?limit=10</code> — En çok satılan ürünler.</div>
+      <div class="endpoint"><span class="badge get">GET</span> <code>/api/reports/customer-summary/{customer_id}</code> — Müşteri sipariş/harcama özeti.</div>
+      <div class="endpoint"><span class="badge get">GET</span> <code>/api/reports/category-sales</code> — Kategori bazında satış özeti.</div>
+      <div class="endpoint"><span class="badge get">GET</span> <code>/api/reports/low-stock-products?threshold=10</code> — Stoğu azalan ürünler.</div>
+    </section>
+
+    <!-- ===================== EĞİTİM AKIŞI ===================== -->
+    <section id="egitim" class="doc-section">
+      <h1>📅 5 Günlük Eğitim Akışı</h1>
+      <p>Her günün sonunda neyi öğrendiğini ve nasıl test edebileceğini göreceksin.</p>
+
+      <hr>
+      <h2>1. Gün — SQL ve Veritabanı Temelleri</h2>
+      <p><strong>Öğrenilecekler:</strong> MSSQL Management Studio, Database/tablo oluşturma, Primary Key, Foreign Key, temel SQL sorguları</p>
+
+      <h3>Görev Listesi</h3>
+      <p><strong>1. ErenShopDB'yi oluştur</strong></p>
+      <ol>
+        <li>SSMS'i aç, sunucuya bağlan</li>
+        <li><code>sql/01_create_database.sql</code> dosyasını çalıştır</li>
+        <li>Sol panelde "ErenShopDB" görünüyor mu? ✓</li>
+      </ol>
+      <p><strong>2. Tabloları oluştur</strong></p>
+      <ol>
+        <li><code>sql/02_create_tables.sql</code> dosyasını çalıştır</li>
+        <li>SSMS → ErenShopDB → Tables → 8 tablo görünüyor mu? ✓</li>
+      </ol>
+      <p><strong>3. Örnek verileri ekle:</strong> <code>sql/03_seed_data.sql</code></p>
+      <p><strong>4. SELECT sorguları çalıştır</strong> (<code>04_training_select_queries.sql</code>)</p>
+      <pre><code>SELECT * FROM Products;
+SELECT * FROM Products WHERE IsActive = 1;
+SELECT Name, Price FROM Products ORDER BY Price DESC;
+SELECT Name, Stock FROM Products WHERE Stock &lt; 10;</code></pre>
+      <p><strong>5. INSERT / UPDATE / DELETE dene</strong></p>
+      <pre><code>INSERT INTO Categories (Name, Description, IsActive, CreatedAt, UpdatedAt)
+VALUES (N'Test Kategori', N'Deneme', 1, GETDATE(), GETDATE());
+
+UPDATE Categories SET Name = N'Test 2' WHERE Name = N'Test Kategori';
+
+DELETE FROM Categories WHERE Name = N'Test 2';</code></pre>
+
+      <p><strong>Gün Sonu Kontrol:</strong></p>
+      <ul class="checklist">
+        <li>ErenShopDB oluşturuldu</li>
+        <li>8 tablo oluşturuldu</li>
+        <li>SELECT ile veriler görüntülendi</li>
+        <li>INSERT/UPDATE/DELETE yapıldı</li>
+      </ul>
+
+      <hr>
+      <h2>2. Gün — API'yi Çalıştırma ve GET Endpoint'leri</h2>
+      <p><strong>Öğrenilecekler:</strong> Python sanal ortam, FastAPI çalıştırma, Swagger, Postman, GET endpoint'leri</p>
+
+      <h3>Görev Listesi</h3>
+      <pre><code># Kurulum
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+copy .env.example .env
+
+# Başlat
+uvicorn app.main:app --reload --port 8000</code></pre>
+      <p><strong>Swagger'ı incele:</strong> <a href="http://localhost:8000/docs" target="_blank">http://localhost:8000/docs</a></p>
+      <p><strong>Postman'da sırayla dene:</strong></p>
+      <pre><code>GET /api/health           → API çalışıyor mu?
+GET /api/categories       → Kategorileri gör
+GET /api/products         → Ürünleri gör
+GET /api/customers        → Müşterileri gör
+GET /api/products/search?keyword=mouse
+GET /api/products/category/1</code></pre>
+      <p>Her Postman isteğinden sonra SSMS'te doğrula:</p>
+      <pre><code>SELECT * FROM Products WHERE CategoryId = 1;</code></pre>
+
+      <p><strong>Gün Sonu Kontrol:</strong></p>
+      <ul class="checklist">
+        <li>API ayakta</li>
+        <li>Swagger açılıyor</li>
+        <li>Postman collection import edildi</li>
+        <li>GET istekleri başarılı</li>
+        <li>SQL ile cevaplar doğrulandı</li>
+      </ul>
+
+      <hr>
+      <h2>3. Gün — POST, PUT, DELETE İstekleri</h2>
+      <p><strong>Öğrenilecekler:</strong> Yeni kayıt oluşturma, güncelleme, soft delete, HTTP status kodları</p>
+
+      <h3>Görev Listesi</h3>
+      <p><strong>1. Yeni kategori ekle</strong></p>
+      <pre><code>POST /api/categories
+{ "name": "Oyun", "description": "Gaming ürünleri" }
+// Beklenen: 201 Created</code></pre>
+      <p><strong>2. Yeni ürün ekle</strong></p>
+      <pre><code>POST /api/products
+{ "categoryId": 1, "name": "Gaming Mouse",
+  "description": "12000 DPI", "price": 850.00, "stock": 15 }</code></pre>
+      <p><strong>3. Güncelleme yap</strong></p>
+      <pre><code>PUT /api/products/1
+{ "price": 499.00, "stock": 50 }</code></pre>
+      <p>Sonra SQL'de kontrol et: <code>SELECT Price, Stock FROM Products WHERE Id = 1;</code></p>
+      <p><strong>4. Soft delete dene</strong></p>
+      <pre><code>DELETE /api/categories/6   // Az önce eklediğin kategori</code></pre>
+      <p>SQL'de kontrol et:</p>
+      <pre><code>SELECT * FROM Categories WHERE IsActive = 0;  -- Pasif kayıtlar</code></pre>
+      <p>Fiziksel olarak silinmedi, <code>IsActive = 0</code> yapıldı!</p>
+      <p><strong>5. Hata senaryoları dene</strong></p>
+      <pre><code>GET /api/products/9999        // 404 Not Found
+POST /api/customers           // Aynı email'i tekrar dene → 400</code></pre>
+
+      <p><strong>Gün Sonu Kontrol:</strong></p>
+      <ul class="checklist">
+        <li>POST ile kayıt oluşturuldu</li>
+        <li>PUT ile güncelleme yapıldı</li>
+        <li>DELETE çalışıyor (soft delete)</li>
+        <li>SQL ile sonuçlar doğrulandı</li>
+        <li>404 ve 400 hatalarını gördün</li>
+      </ul>
+
+      <hr>
+      <h2>4. Gün — Sepet, Sipariş ve Transaction</h2>
+      <p><strong>Öğrenilecekler:</strong> Sepet işlemleri, transaction mantığı, stok düşme, hata senaryoları</p>
+
+      <h3>Görev Listesi</h3>
+      <p><strong>1. Sepete ürün ekle</strong></p>
+      <pre><code>POST /api/cart/add
+{ "customerId": 1, "productId": 1, "quantity": 2 }</code></pre>
+      <p><strong>2. Stok durumunu not al</strong></p>
+      <pre><code>SELECT Id, Name, Stock FROM Products WHERE Id = 1;
+-- Şu anki stoğu yaz: ____</code></pre>
+      <p><strong>3. Sipariş oluştur</strong></p>
+      <pre><code>POST /api/orders/create-from-cart
+{ "customerId": 1 }</code></pre>
+      <p><strong>4. Transaction etkisini gözlemle</strong></p>
+      <pre><code>-- Stok düştü mü?
+SELECT Id, Name, Stock FROM Products WHERE Id = 1;
+
+-- Sepet temizlendi mi?
+SELECT * FROM CartItems;
+
+-- Sipariş oluştu mu?
+SELECT * FROM Orders;
+SELECT * FROM OrderItems;</code></pre>
+      <p><strong>5. Başarısız sipariş senaryosu (stok yetersiz)</strong></p>
+      <pre><code>-- Stoku 0 yap:
+UPDATE Products SET Stock = 0 WHERE Id = 2;
+
+-- Müşteri 2'nin sepetine ürün 2'yi ekle, sipariş oluşturmaya çalış
+-- → 400 hatası almalısın!</code></pre>
+      <p><strong>6. Ödeme simülasyonu</strong></p>
+      <pre><code>// Başarılı ödeme:
+POST /api/payments/mock-pay
+{ "orderId": 1, "paymentType": "CreditCard", "amount": 900, "forceFail": false }
+// Kontrol: SELECT Status FROM Orders WHERE Id = 1; → "Paid"
+
+// Başarısız ödeme:
+{ "orderId": 2, ..., "forceFail": true }
+// Kontrol: → "PaymentFailed"</code></pre>
+
+      <p><strong>Gün Sonu Kontrol:</strong></p>
+      <ul class="checklist">
+        <li>Sepet işlemleri çalışıyor</li>
+        <li>Sipariş oluşturulunca stok düşüyor</li>
+        <li>Sepet temizleniyor</li>
+        <li>Başarılı ödeme → "Paid"</li>
+        <li>Başarısız ödeme → "PaymentFailed"</li>
+        <li>Yetersiz stok → 400 hatası</li>
+      </ul>
+
+      <hr>
+      <h2>5. Gün — Raporlar, JOIN Sorguları ve Genel Tekrar</h2>
+      <p><strong>Öğrenilecekler:</strong> Rapor endpoint'leri, JOIN ve GROUP BY sorguları, uçtan uca tekrar</p>
+
+      <h3>Görev Listesi</h3>
+      <p><strong>1. Rapor endpoint'lerini test et</strong></p>
+      <pre><code>GET /api/reports/daily-sales
+GET /api/reports/top-products?limit=5
+GET /api/reports/category-sales
+GET /api/reports/low-stock-products?threshold=20
+GET /api/reports/customer-summary/1</code></pre>
+      <p><strong>2. SQL raporlama sorgularını çalıştır</strong> (<code>06_training_report_queries.sql</code>)</p>
+      <pre><code>-- Günlük satış
+SELECT CAST(CreatedAt AS DATE), COUNT(*), SUM(TotalAmount)
+FROM Orders WHERE Status = 'Paid'
+GROUP BY CAST(CreatedAt AS DATE);
+
+-- En çok satılan ürünler
+SELECT TOP 5 p.Name, SUM(oi.Quantity) AS Sold
+FROM OrderItems oi
+INNER JOIN Products p ON oi.ProductId = p.Id
+GROUP BY p.Id, p.Name
+ORDER BY Sold DESC;</code></pre>
+      <p><strong>3. JOIN sorgularını çalıştır</strong> (<code>05_training_join_queries.sql</code>)</p>
+      <p><strong>4. Genel tekrar — kendini test et:</strong></p>
+      <ul class="checklist">
+        <li>Yeni bir kategori oluştur</li>
+        <li>O kategoriye 2 ürün ekle</li>
+        <li>Yeni bir müşteri oluştur</li>
+        <li>Müşterinin sepetine her iki ürünü ekle</li>
+        <li>Sepetten sipariş oluştur</li>
+        <li>Ödemeyi tamamla</li>
+        <li>Raporlarda siparişi gör</li>
+        <li>Tüm adımları SQL ile doğrula</li>
+      </ul>
+
+      <hr>
+      <h2>Sonraki Adımlar (Bonus)</h2>
+      <ol>
+        <li><strong>Yeni endpoint ekle:</strong> <code>GET /api/products/out-of-stock</code></li>
+        <li><strong>Authentication:</strong> JWT token ile giriş sistemi</li>
+        <li><strong>Pagination:</strong> <code>/api/products?page=1&amp;size=10</code></li>
+        <li><strong>Logging:</strong> Her istek loglanacak</li>
+        <li><strong>Deployment:</strong> Uygulamayı bir sunucuya taşı</li>
+      </ol>
+    </section>
+
+    <!-- ===================== EĞİTİM PLATFORMU ===================== -->
+    <section id="platform" class="doc-section">
+      <h1>🎓 Eğitim Platformu</h1>
+      <p>İş analisti yetkinliklerini ölçen iki modülden oluşur. Tamamen lokal ve kural tabanlıdır — dış AI/LLM kullanılmaz.</p>
+
+      <div class="note">
+        <strong>Erişim:</strong> Mağaza sayfasında üst menüden <strong>🎓 Eğitim</strong> butonuna tıkla,<br>
+        veya direkt: <a href="/frontend/training.html" target="_blank"><code>/frontend/training.html</code></a>
+      </div>
+
+      <h2>📋 Kurulum Adımları (özet)</h2>
+      <p>Eğitim platformu mevcut ErenShop API'sinin içinde bir modüldür. Çalıştırmak için aşağıdakileri yap:</p>
+
+      <h3>1. Bağımlılıkları yükle</h3>
+      <p><code>requirements.txt</code> güncellenmiştir. Sanal ortamda:</p>
+      <pre><code>venv\Scripts\activate
+pip install -r requirements.txt</code></pre>
+      <p>Yeni eklenenler: <code>python-docx</code> (Word üretme/okuma), <code>python-multipart</code> (dosya upload).</p>
+
+      <h3>2. SQL tablolarını oluştur</h3>
+      <p>SSMS'te <code>ErenShopDB</code>'ye bağlıyken sırayla 3 dosyayı çalıştır (F5):</p>
+      <table>
+        <tr><th>Sıra</th><th>Dosya</th><th>İçerik</th></tr>
+        <tr><td>1</td><td><code>sql/08_training_tables.sql</code></td><td>6 tablo (TrainingUsers, BusinessRequests, RequestSubmissions, SqlQuestions, SqlTests, SqlTestQuestions) + varsayılan Eren/Omer kullanıcıları</td></tr>
+        <tr><td>2</td><td><code>sql/09_seed_business_requests.sql</code></td><td>40 hazır geliştirme talebi (10 kolay + 20 orta + 10 zor)</td></tr>
+        <tr><td>3</td><td><code>sql/10_seed_sql_questions.sql</code></td><td>60 SQL sorusu (20 kolay + 25 orta + 15 zor)</td></tr>
+      </table>
+
+      <h3>3. API'yi başlat</h3>
+      <pre><code>.\run.bat
+# veya
+uvicorn app.main:app --reload --port 8000</code></pre>
+
+      <h3>4. Eğitim sayfasını aç</h3>
+      <p><a href="/frontend/training.html" target="_blank"><strong>http://localhost:8000/frontend/training.html</strong></a></p>
+
+      <hr>
+      <h2>📝 Modül 1 — Analiz Teknik Dokümanı Egzersizi</h2>
+      <p>Bir iş analisti rolü en kritik çıktısı olan <strong>analiz teknik dokümanı</strong> yazma pratiğini ölçer.</p>
+
+      <h3>Adımlar (Eren)</h3>
+      <ol>
+        <li><strong>Analiz Egzersizi</strong> sekmesine git</li>
+        <li><strong>📚 Örnek Dokümanı İndir</strong> → Favori Listesi talebi için tam doldurulmuş referans dokümanı indir, oku. <em>Sadece ilk kullanımda gerekli.</em></li>
+        <li><strong>🎲 Yeni Talep Al</strong> → rastgele bir geliştirme talebi gelir (ör. "Kupon Kodu Sistemi")</li>
+        <li><strong>📥 Şablonu İndir (.docx)</strong> → kapak sayfasında talep yazılı olan boş Word dosyası iner</li>
+        <li>Word'ü doldur (aşağıdaki "Şablondaki Bölümler" tablosuna ve örnek dokümana bak)</li>
+        <li><strong>Yükle ve Değerlendir</strong> → sistem otomatik puanlar</li>
+        <li>Sonuçlar: <strong>Yapısal</strong> + <strong>İçerik</strong> + <strong>Toplam</strong> puan, bölüm bazlı detay, anahtar kelime tablosu</li>
+        <li>Durum <strong>pending</strong> olur — Omer onaylayınca approved/rejected olur</li>
+      </ol>
+
+      <div class="note">
+        <strong>📚 Örnek Doküman:</strong> <a href="/api/training/template/example" target="_blank">/api/training/template/example</a> — "Favori Ürünler Listesi" talebi için profesyonel iş analisti seviyesinde doldurulmuş referans doküman. Bölüm uzunlukları, detay seviyesi ve yazım stili için rehber olarak kullan.
+      </div>
+
+      <h3>Önemli Kurallar</h3>
+      <ul>
+        <li>Bölüm başlıklarını (numara + isim) <strong>DEĞİŞTİRME</strong> — sistem başlığa göre arama yapar</li>
+        <li>İtalik gri yol gösterici metinleri (her bölüm başlığı altındaki) silebilirsin</li>
+        <li>Köşeli parantez içindeki örnekleri (<code>[Adınız Soyadınız]</code> gibi) kendi içeriğinle değiştir</li>
+        <li>Placeholder metinleri olduğu gibi bırakırsan bölüm "boş" sayılır</li>
+        <li>Aynı talebi tekrar deneyebilirsin — onaylanan talep bir daha gelmez, reddedilen tekrar denenebilir</li>
+      </ul>
+
+      <h3>Şablondaki Bölümler (Sektör Standardı BRD/SRS)</h3>
+      <table>
+        <tr><th>#</th><th>Bölüm</th><th>Zorunlu</th><th>Min. Kelime</th></tr>
+        <tr><td>1</td><td>Doküman Bilgileri</td><td>✓</td><td>20</td></tr>
+        <tr><td>2</td><td>Yönetici Özeti</td><td>✓</td><td>60</td></tr>
+        <tr><td>3</td><td>Amaç ve Kapsam (Kapsam Dışı dahil!)</td><td>✓</td><td>80</td></tr>
+        <tr><td>4</td><td>Mevcut Durum Analizi</td><td>✓</td><td>60</td></tr>
+        <tr><td>5</td><td>Paydaşlar</td><td>✓</td><td>30</td></tr>
+        <tr><td>6</td><td>Fonksiyonel Gereksinimler (FG-01, FG-02 ...)</td><td>✓</td><td>100</td></tr>
+        <tr><td>7</td><td>Fonksiyonel Olmayan Gereksinimler</td><td>✓</td><td>50</td></tr>
+        <tr><td>8</td><td>İş Kuralları (IK-01, IK-02 ...)</td><td>✓</td><td>80</td></tr>
+        <tr><td>9</td><td>Süreç Akışı (Ana + Alternatif)</td><td>✓</td><td>80</td></tr>
+        <tr><td>10</td><td>Veri Modeli (tablo/kolon, FK)</td><td>✓</td><td>60</td></tr>
+        <tr><td>11</td><td>Kullanıcı Arayüzü / Mock-up</td><td>opsiyonel</td><td>40</td></tr>
+        <tr><td>12</td><td>Entegrasyonlar</td><td>opsiyonel</td><td>30</td></tr>
+        <tr><td>13</td><td>Kabul Kriterleri (KK-01, KK-02 ...)</td><td>✓</td><td>60</td></tr>
+        <tr><td>14</td><td>Test Senaryoları (TS-01: ön koşul/adım/sonuç)</td><td>✓</td><td>100</td></tr>
+        <tr><td>15</td><td>Riskler ve Varsayımlar</td><td>opsiyonel</td><td>30</td></tr>
+        <tr><td>16</td><td>Açık Sorular</td><td>opsiyonel</td><td>20</td></tr>
+      </table>
+
+      <h3>Puanlama (Kural Tabanlı)</h3>
+      <p><strong>Toplam Puan = (Yapısal + İçerik) / 2</strong></p>
+
+      <p><strong>Yapısal Skor (her bölüm için):</strong></p>
+      <table>
+        <tr><th>Durum</th><th>Puan</th></tr>
+        <tr><td>Bölüm hiç yok</td><td>0</td></tr>
+        <tr><td>Yalnız placeholder duruyor</td><td>%20</td></tr>
+        <tr><td>Çok kısa (< yarı min_words)</td><td>%50</td></tr>
+        <tr><td>Kısa (< min_words, > yarı)</td><td>%75</td></tr>
+        <tr><td>Yeterli (≥ min_words)</td><td>%100</td></tr>
+      </table>
+      <p>Zorunlu bölümler 2 puan, opsiyonel 1 puan ağırlığında.</p>
+
+      <p><strong>İçerik Skoru:</strong></p>
+      <ul>
+        <li><strong>Anahtar Kelime (%70):</strong> Talebin <code>ExpectedKeywords</code> listesindeki kelimelerin kaçı dokümanda geçiyor?</li>
+        <li><strong>Toplam Kelime (%30):</strong> Talebin <code>MinTotalWords</code> değeri karşılanıyor mu?</li>
+      </ul>
+
+      <hr>
+      <h2>💾 Modül 2 — Dinamik SQL Bilgi Testi</h2>
+      <p>SQL bilgisini ölçer. Her test başlangıcında havuzdan rastgele sorular seçilir.</p>
+
+      <h3>Adımlar (Eren)</h3>
+      <ol>
+        <li><strong>SQL Testi</strong> sekmesine git</li>
+        <li>Soru sayısı ayarla: kolay / orta / zor (varsayılan: 4 / 4 / 2 = 10 soru)</li>
+        <li><strong>🚀 Testi Başlat</strong></li>
+        <li>Soruları çöz (yazıların otomatik kaydedilir, 600ms sonra)</li>
+        <li><strong>✅ Testi Tamamla</strong> → toplam skor + her soru için doğru/yanlış + açıklamalar</li>
+      </ol>
+
+      <h3>Soru Tipleri</h3>
+      <table>
+        <tr><th>Tip</th><th>Açıklama</th><th>Örnek</th></tr>
+        <tr><td>Çoktan Seçmeli</td><td>Radio butonla işaretle</td><td>"Hangi anahtar kelime sıralama için kullanılır?" A) SORT BY  <strong>B) ORDER BY</strong>  C) GROUP BY</td></tr>
+        <tr><td>Boşluk Doldurma</td><td>Kısa cevap yaz (büyük/küçük harf duyarsız)</td><td>"SELECT * ___ Products;" → cevap: <strong>FROM</strong></td></tr>
+        <tr><td>Kısa SQL Yaz</td><td>Kısa SQL ifadesi yaz (noktalı virgül, fazla boşluk önemsiz)</td><td>"Aktif kategorileri listele." → <strong>SELECT * FROM Categories WHERE IsActive = 1</strong></td></tr>
+      </table>
+
+      <h3>Soru Dağılımı (Toplam 60 Soru)</h3>
+      <table>
+        <tr><th>Zorluk</th><th>Adet</th><th>Puan</th><th>İçerik</th></tr>
+        <tr><td>Kolay</td><td>20</td><td>10/soru</td><td>SELECT, WHERE, ORDER BY, INSERT/UPDATE/DELETE, LIKE, BETWEEN</td></tr>
+        <tr><td>Orta</td><td>25</td><td>15-20/soru</td><td>JOIN, GROUP BY, HAVING, aggregate, subquery, CASE WHEN, alias</td></tr>
+        <tr><td>Zor</td><td>15</td><td>20-30/soru</td><td>LEFT JOIN ile NULL, CTE, window function, PIVOT, transaction, stored procedure</td></tr>
+      </table>
+
+      <hr>
+      <h2>👨‍💼 Admin Paneli (Omer için)</h2>
+      <ol>
+        <li>Sağ üstte kullanıcı seçimi → <strong>Omer (admin)</strong></li>
+        <li>Yeni sekme açılır: <strong>Admin İnceleme</strong></li>
+        <li>Bekleyen submission'ları gör → "Detay" ile aç, Word'ü indir, oku</li>
+        <li><strong>✓ Onayla</strong> veya <strong>✗ Reddet</strong> + isteğe bağlı not</li>
+        <li>Onaylanan talep Eren'e bir daha gelmez. Reddedilen tekrar denenebilir</li>
+      </ol>
+
+      <hr>
+      <h2>📂 Klasör ve Dosya Yapısı</h2>
+      <pre><code>erenshop-api/
+├── app/
+│   ├── services/
+│   │   ├── document_template.py    → Şablon bölümleri (Single Source of Truth)
+│   │   ├── document_evaluator.py   → Kural tabanlı değerlendirici
+│   │   └── training_service.py     → Eğitim iş mantığı
+│   ├── routes/
+│   │   └── training_routes.py      → /api/training/... endpoint'leri
+│   └── schemas/
+│       └── training_schema.py
+├── sql/
+│   ├── 08_training_tables.sql
+│   ├── 09_seed_business_requests.sql
+│   └── 10_seed_sql_questions.sql
+├── frontend/
+│   ├── training.html
+│   ├── training.css
+│   └── training.js
+└── uploads/                        → Yüklenen Word dosyaları burada saklanır</code></pre>
+
+      <h2>🔌 Eğitim API Endpoint'leri</h2>
+      <div class="endpoint"><span class="badge get">GET</span> <code>/api/training/users</code> — Eren ve Omer kullanıcılarını listeler.</div>
+      <div class="endpoint"><span class="badge get">GET</span> <code>/api/training/requests/random?user_id=1</code> — Kullanıcıya tekrar gelmeyecek rastgele talep.</div>
+      <div class="endpoint"><span class="badge get">GET</span> <code>/api/training/template?request_id=5</code> — Boş Word şablonunu indir (kapakta talep yazılı).</div>
+      <div class="endpoint"><span class="badge post">POST</span> <code>/api/training/submissions</code> — Doldurulmuş Word'ü yükle (multipart/form-data).</div>
+      <div class="endpoint"><span class="badge get">GET</span> <code>/api/training/submissions/user/{user_id}</code> — Kullanıcının gönderimleri.</div>
+      <div class="endpoint"><span class="badge put">PUT</span> <code>/api/training/submissions/{id}/review</code> — Admin onay/red <code>{ "status": "approved", "review_note": "..." }</code></div>
+      <div class="endpoint"><span class="badge post">POST</span> <code>/api/training/sql-tests/start</code> — Yeni test başlat <code>{ "user_id": 1, "easy_count": 4, "medium_count": 4, "hard_count": 2 }</code></div>
+      <div class="endpoint"><span class="badge post">POST</span> <code>/api/training/sql-tests/answer</code> — Cevap kaydet <code>{ "test_question_id": 1, "user_answer": "FROM" }</code></div>
+      <div class="endpoint"><span class="badge post">POST</span> <code>/api/training/sql-tests/{id}/complete</code> — Testi sonlandır, skor hesapla.</div>
+      <div class="endpoint"><span class="badge get">GET</span> <code>/api/training/sql-tests/user/{user_id}</code> — Geçmiş testler.</div>
+      <p>Tam liste için Swagger: <a href="http://localhost:8000/docs" target="_blank">/docs</a> → <strong>Training</strong> tag'i altında.</p>
+
+      <h2>💡 İpuçları (Eren için)</h2>
+      <ul>
+        <li><strong>Talebi dikkatlice oku</strong> — açıklamada geçen iş kurallarını şablonda <em>İş Kuralları</em> bölümünde kodla.</li>
+        <li><strong>Kapsam Dışı yazmayı unutma</strong> — bir analist olarak neyin proje DIŞINDA olduğunu yazmak en az neyin İÇERDİĞİ kadar önemli.</li>
+        <li><strong>Her gereksinim test edilebilir olsun</strong> — "Sistem hızlı olmalı" değil, "Sayfa < 2 sn açılmalı" gibi.</li>
+        <li><strong>İlk denemende düşük puan alırsan paniklemе</strong> — detay panelinde hangi bölümler kısa kalmış görebilirsin, iyileştirip tekrar yükle.</li>
+        <li><strong>SQL testinde önce kolay sorularla başla</strong>, kendine güven gelince orta/zor sayısını artır.</li>
+      </ul>
+    </section>
+
+    <!-- ===================== SQL NOTLARI ===================== -->
+    <section id="sql" class="doc-section">
+      <h1>🗄️ SQL Eğitim Notları</h1>
+
+      <h2>1. Veritabanı ve Tablo Nedir?</h2>
+      <p><strong>Veritabanı (Database):</strong> Tabloları içeren konteyner. Bizim veritabanımız: <code>ErenShopDB</code></p>
+      <p><strong>Tablo (Table):</strong> Excel tablosu gibi düşün. Sütunlar ve satırlar vardır.</p>
+      <pre><code>Categories Tablosu:
++----+------------+---------------------+----------+
+| Id | Name       | Description         | IsActive |
++----+------------+---------------------+----------+
+|  1 | Elektronik | Elektronik ürünler  |    1     |
+|  2 | Ofis       | Ofis malzemeleri    |    1     |
++----+------------+---------------------+----------+</code></pre>
+
+      <h2>2. Primary Key (Birincil Anahtar)</h2>
+      <p>Her tablodaki her satırı benzersiz şekilde tanımlar.</p>
+      <pre><code>CREATE TABLE Categories (
+    Id INT IDENTITY(1,1) PRIMARY KEY,  -- Otomatik 1'den artar
+    Name NVARCHAR(100) NOT NULL,
+    ...
+);</code></pre>
+      <p><strong>Kural:</strong> İki satır aynı Id'ye sahip olamaz.</p>
+
+      <h2>3. Foreign Key (Yabancı Anahtar)</h2>
+      <p>Bir tablodaki sütunun başka bir tabloya referans vermesidir.</p>
+      <pre><code>-- Products.CategoryId → Categories.Id'yi referans alır
+CONSTRAINT FK_Products_Categories FOREIGN KEY (CategoryId)
+    REFERENCES Categories(Id)</code></pre>
+      <pre><code>Categories (Id=1, Name="Elektronik")
+       ↑
+Products (CategoryId=1, Name="Mouse")</code></pre>
+
+      <h2>4. Temel SQL Komutları</h2>
+
+      <h3>SELECT — Veri Okuma</h3>
+      <pre><code>SELECT * FROM Products;
+SELECT Name, Price FROM Products;
+SELECT * FROM Products WHERE IsActive = 1;
+SELECT * FROM Products ORDER BY Price DESC;</code></pre>
+
+      <h3>INSERT — Veri Ekleme</h3>
+      <pre><code>INSERT INTO Categories (Name, Description, IsActive, CreatedAt, UpdatedAt)
+VALUES (N'Elektronik', N'Elektronik ürünler', 1, GETDATE(), GETDATE());</code></pre>
+      <blockquote>⚠️ NVARCHAR sütunlara Türkçe karakter eklerken <code>N'...'</code> prefix'ini kullan!</blockquote>
+
+      <h3>UPDATE — Veri Güncelleme</h3>
+      <pre><code>-- DİKKAT: WHERE yazmayı unutma! Yoksa tüm satırlar güncellenir!
+UPDATE Products
+SET Stock = 20, UpdatedAt = GETDATE()
+WHERE Id = 1;</code></pre>
+
+      <h3>DELETE — Veri Silme</h3>
+      <pre><code>-- DİKKAT: WHERE yazmayı unutma!
+DELETE FROM CartItems WHERE CartId = 1;</code></pre>
+
+      <h2>5. JOIN Kavramı</h2>
+      <p>İki tabloyu birleştirerek sorgulama. Ürün tablosunda sadece <code>CategoryId</code> var, kategori adını almak için JOIN kullanırız.</p>
+      <pre><code>-- Ürünleri kategori adıyla getir
+SELECT p.Name, p.Price, c.Name AS CategoryName
+FROM Products p
+INNER JOIN Categories c ON p.CategoryId = c.Id;</code></pre>
+      <table>
+        <tr><th>JOIN Tipi</th><th>Açıklama</th></tr>
+        <tr><td>INNER JOIN</td><td>Her iki tabloda da eşleşen kayıtları getirir</td></tr>
+        <tr><td>LEFT JOIN</td><td>Sol tablonun tüm kayıtları + sağ tabloda eşleşenler</td></tr>
+      </table>
+
+      <h2>6. Aggregate Fonksiyonlar</h2>
+      <pre><code>COUNT(*)       -- Kaç satır var?
+SUM(Price)     -- Toplamı hesapla
+AVG(Price)     -- Ortalamayı hesapla
+MIN(Price)     -- En küçük değer
+MAX(Price)     -- En büyük değer</code></pre>
+
+      <h2>7. GROUP BY</h2>
+      <p>Verileri gruplandırarak özet bilgi almak için.</p>
+      <pre><code>-- Kategorilere göre ürün sayısı
+SELECT CategoryId, COUNT(*) AS ProductCount
+FROM Products
+GROUP BY CategoryId;
+
+-- Sipariş durumuna göre toplam tutar
+SELECT Status, SUM(TotalAmount) AS Total
+FROM Orders
+GROUP BY Status;</code></pre>
+      <blockquote><strong>Kural:</strong> SELECT'teki her sütun ya GROUP BY'da olmalı ya da aggregate fonksiyon içinde olmalı.</blockquote>
+
+      <h2>8. HAVING</h2>
+      <p>GROUP BY sonrasında filtre. WHERE gruplama öncesi, HAVING gruplama sonrası çalışır.</p>
+      <pre><code>-- En az 3 ürünü olan kategoriler
+SELECT CategoryId, COUNT(*) AS ProductCount
+FROM Products
+GROUP BY CategoryId
+HAVING COUNT(*) >= 3;</code></pre>
+
+      <h2>9. Transaction Kavramı</h2>
+      <p><strong>Transaction:</strong> Birden fazla SQL işleminin "ya hep ya hiç" prensibiyle çalışması.</p>
+      <p><strong>Örnek — Sipariş oluşturma:</strong></p>
+      <ol>
+        <li>Orders tablosuna kayıt ekle</li>
+        <li>OrderItems tablosuna satırlar ekle</li>
+        <li>Products tablosundan stok düş</li>
+        <li>CartItems tablosunu temizle</li>
+      </ol>
+      <p>3. adımda hata olursa 1. ve 2. adımlar da geri alınmalı. Yarım kalan sipariş olmaz!</p>
+      <pre><code>BEGIN TRANSACTION;
+BEGIN TRY
+    INSERT INTO Orders (...) VALUES (...);
+    INSERT INTO OrderItems (...) VALUES (...);
+    UPDATE Products SET Stock = Stock - 1 WHERE Id = 1;
+    COMMIT TRANSACTION;
+END TRY
+BEGIN CATCH
+    ROLLBACK TRANSACTION;
+    PRINT 'Hata: ' + ERROR_MESSAGE();
+END CATCH;</code></pre>
+      <p><strong>Python/pyodbc'de Transaction:</strong></p>
+      <pre><code>try:
+    cursor.execute("INSERT ...")
+    cursor.execute("UPDATE ...")
+    conn.commit()   # Başarılı → kaydet
+except:
+    conn.rollback() # Hata → geri al</code></pre>
+
+      <h2>10. Soft Delete (Mantıksal Silme)</h2>
+      <p>Veritabanından fiziksel olarak silmek yerine <code>IsActive = 0</code> yapmak.</p>
+      <pre><code>-- Fiziksel silme (geri dönüşü yok!)
+DELETE FROM Products WHERE Id = 1;
+
+-- Soft delete (geri getirilebilir)
+UPDATE Products SET IsActive = 0 WHERE Id = 1;</code></pre>
+      <p><strong>Neden tercih ederiz?</strong> Veri kaybı olmaz, geçmişi izleyebiliriz, siparişlerde bağlantılı ürün hâlâ görünür.</p>
+
+      <h2>11. Faydalı MSSQL Fonksiyonları</h2>
+      <pre><code>GETDATE()           -- Şu anki tarih ve saat
+CAST(x AS DATE)     -- Tarih-saati sadece tarihe çevir
+ISNULL(x, 0)        -- NULL ise 0 kullan
+LEN('metin')        -- Metin uzunluğu
+UPPER('metin')      -- Büyük harf
+LOWER('Metin')      -- Küçük harf
+CONCAT(a, ' ', b)   -- Metinleri birleştir</code></pre>
+    </section>
+
+    <!-- ===================== POSTMAN ===================== -->
+    <section id="postman" class="doc-section">
+      <h1>📬 Postman Eğitim Notları</h1>
+
+      <h2>Postman Nedir?</h2>
+      <p>API'lere HTTP istekleri atmana yarayan araçtır. Tarayıcıda yapamayacağın POST, PUT, DELETE gibi istekleri kolayca atabilirsin.</p>
+
+      <h2>1. Temel Kavramlar</h2>
+      <h3>HTTP Metodları</h3>
+      <table>
+        <tr><th>Metod</th><th>Ne yapar?</th><th>Örnek</th></tr>
+        <tr><td><span class="badge get">GET</span></td><td>Veri okur</td><td>Ürün listesi getir</td></tr>
+        <tr><td><span class="badge post">POST</span></td><td>Yeni kayıt oluşturur</td><td>Ürün ekle</td></tr>
+        <tr><td><span class="badge put">PUT</span></td><td>Mevcut kaydı günceller</td><td>Ürün fiyatını değiştir</td></tr>
+        <tr><td><span class="badge delete">DELETE</span></td><td>Kaydı siler/pasife alır</td><td>Ürünü sil</td></tr>
+      </table>
+
+      <h3>URL Yapısı</h3>
+      <pre><code>http://localhost:8000/api/products/1
+       ↑              ↑        ↑
+    sunucu         prefix   path param</code></pre>
+
+      <h2>2. Environment Variable Kullanımı</h2>
+      <p>URL'leri hardcode yazmak yerine değişken kullanmana yarar.</p>
+      <pre><code>{{baseUrl}}/api/products/{{productId}}
+↓ çalışınca ↓
+http://localhost:8000/api/products/1</code></pre>
+      <p><strong>Değişken nasıl düzenlenir:</strong> Sağ üstte Environment selector → ErenShop_Local → göz simgesi</p>
+
+      <h2>3. İlk İstek: Health Check</h2>
+      <ol>
+        <li>Collections → 01 - Health Check → API Health Check</li>
+        <li>Method: <code>GET</code> | URL: <code>{{baseUrl}}/api/health</code></li>
+        <li><strong>Send</strong> tıkla</li>
+      </ol>
+      <pre><code>{ "success": true, "message": "API ve veritabanı bağlantısı sağlıklı.",
+  "data": { "api": "ok", "database": "ok" } }</code></pre>
+
+      <h2>4. Query Parameter Kullanımı</h2>
+      <pre><code>GET /api/products/search?keyword=mouse</code></pre>
+      <p>Postman'da: URL yaz → <strong>Params</strong> sekmesi → Key: <code>keyword</code>, Value: <code>mouse</code></p>
+
+      <h2>5. Request Body Gönderme (POST/PUT)</h2>
+      <ol>
+        <li>Method: <code>POST</code> seç</li>
+        <li><strong>Body</strong> sekmesi → <strong>raw</strong> → dropdown'dan <strong>JSON</strong> seç</li>
+        <li>JSON'u yaz → Send</li>
+      </ol>
+      <pre><code>{
+  "categoryId": 1,
+  "name": "Test Ürün",
+  "description": "Açıklama",
+  "price": 100.00,
+  "stock": 10
+}</code></pre>
+
+      <h2>6. Response'u Okuma</h2>
+      <table>
+        <tr><th>Status Code</th><th>Anlam</th></tr>
+        <tr><td>200 OK</td><td>Başarılı</td></tr>
+        <tr><td>201 Created</td><td>Yeni kayıt oluşturuldu</td></tr>
+        <tr><td>400 Bad Request</td><td>Hatalı istek</td></tr>
+        <tr><td>404 Not Found</td><td>Kayıt bulunamadı</td></tr>
+      </table>
+
+      <h2>7. Tam Senaryo: Alışveriş Akışı</h2>
+      <ol>
+        <li><strong>Kategori Ekle</strong> — POST /api/categories <code>{"name": "Test", "description": "test"}</code></li>
+        <li><strong>Ürün Ekle</strong> — POST /api/products <code>{"categoryId": 1, "name": "Test Ürün", "price": 100, "stock": 10}</code></li>
+        <li><strong>Müşteri Ekle</strong> — POST /api/customers <code>{"first_name": "Test", "last_name": "User", "email": "test@test.com"}</code></li>
+        <li><strong>Sepete Ekle</strong> — POST /api/cart/add <code>{"customerId": 1, "productId": 1, "quantity": 2}</code></li>
+        <li><strong>Sepeti Gör</strong> — GET /api/cart/1</li>
+        <li><strong>Sipariş Oluştur</strong> — POST /api/orders/create-from-cart <code>{"customerId": 1}</code></li>
+        <li><strong>Ödeme Yap</strong> — POST /api/payments/mock-pay <code>{"orderId": 1, "paymentType": "CreditCard", "amount": 200, "forceFail": false}</code></li>
+        <li><strong>Raporları Gör</strong> — GET /api/reports/top-products | GET /api/reports/daily-sales</li>
+      </ol>
+
+      <h2>8. Hata Senaryolarını Test Et</h2>
+      <table>
+        <tr><th>Senaryo</th><th>Beklenen Hata</th></tr>
+        <tr><td>Olmayan kategori ID</td><td>404 Not Found</td></tr>
+        <tr><td>Boş sepetten sipariş</td><td>400 Bad Request</td></tr>
+        <tr><td>Geçersiz sipariş durumu</td><td>400 Bad Request</td></tr>
+        <tr><td>Aynı email ile müşteri ekle</td><td>400 Bad Request</td></tr>
+      </table>
+
+      <h2>9. Headers</h2>
+      <p>POST/PUT isteklerinde Content-Type ayarla:</p>
+      <pre><code>Content-Type: application/json</code></pre>
+      <blockquote>Not: Body → raw → JSON seçilince bu header otomatik eklenir.</blockquote>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('[data-target]').forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const target = link.dataset.target;
+      document.querySelectorAll('.doc-section').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('[data-target]').forEach(l => l.classList.remove('active'));
+      document.getElementById(target).classList.add('active');
+      link.classList.add('active');
+      window.scrollTo(0, 0);
+    });
+  });
+
+  // ── Açılır sol gezinme (üst sayfa navigasyonu) ──
+  (function() {
+    const nav = document.getElementById('topSideNav');
+    const overlay = document.getElementById('topSideNavOverlay');
+    const openBtn = document.getElementById('menuToggle');
+    const closeBtn = document.getElementById('menuClose');
+    if (!nav || !overlay) return;
+    const open = () => { nav.classList.add('open'); overlay.classList.add('open'); };
+    const close = () => { nav.classList.remove('open'); overlay.classList.remove('open'); };
+    openBtn.addEventListener('click', open);
+    closeBtn.addEventListener('click', close);
+    overlay.addEventListener('click', close);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+  })();
+</script>
+
+</body>
+</html>
